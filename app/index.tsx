@@ -19,7 +19,10 @@ export default function Index() {
         handleSubmit,
         formState: { errors, isLoading }
     } = useForm<LoginData>({
-        defaultValues: { username: '', password: '' },
+        defaultValues: {
+            username: 'test2',
+            password: '8ca1329b45b70bd07e000a4f3c6eb5b6'
+        }
     })
 
     const dispatch = useAppContextDispatch()
