@@ -13,7 +13,7 @@ import { router } from 'expo-router'
 import { loginUser } from '@/utils/utils'
 import { LoginData } from '@/types/types'
 
-export default function Index() {
+export default function LoginScreen() {
     const {
         control,
         handleSubmit,
@@ -111,6 +111,8 @@ export default function Index() {
                 <TouchableOpacity
                     disabled={isLoading}
                     onPress={handleSubmit(onSubmit)}
+                    role={'button'}
+                    testID={'login-button'}
                     style={[
                         styles.button,
                         {
