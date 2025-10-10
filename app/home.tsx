@@ -1,11 +1,10 @@
 import { Button, Text, View } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
 import { router } from 'expo-router'
-
 export default function HomeScreen() {
     return (
         <View>
-            <Text>Home</Text>
+            <Text>This is the home screen</Text>
             <Button
                 onPress={async () => {
                     await SecureStore.deleteItemAsync('auth')
