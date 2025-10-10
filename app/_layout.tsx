@@ -1,32 +1,43 @@
 import {
     DarkTheme,
     DefaultTheme,
-    ThemeProvider,
+    ThemeProvider
 } from '@react-navigation/native'
-import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import 'react-native-reanimated'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
 import { useColorScheme } from '@/hooks/use-color-scheme'
+import { AppContextProvider, useAppContext } from '@/context-provider/provider'
+import { Stack } from 'expo-router'
 
 const queryClient = new QueryClient()
-
-export const unstable_settings = {
-    anchor: '(tabs)',
-}
 
 export default function RootLayout() {
     const colorScheme = useColorScheme()
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider
-                value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-            >
-                <Stack />
-                <StatusBar style="auto" />
-            </ThemeProvider>
-        </QueryClientProvider>
+        <AppContextProvider>
+            <QueryClientProvider client={queryClient}>
+                <ThemeProvider
+                    value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+                >
+                    <RootNavigation />
+                    <StatusBar style="auto" />
+                </ThemeProvider>
+            </QueryClientProvider>
+        </AppContextProvider>
+    )
+}
+
+function RootNavigation() {
+    const { isSignedIn } = useAppContext()
+
+    return (
+        <Stack>
+            <Stack.Protected guard={isSignedIn}>
+                <Stack.Screen name="home" />
+            </Stack.Protected>
+            <Stack.Screen name="index" />
+        </Stack>
     )
 }
