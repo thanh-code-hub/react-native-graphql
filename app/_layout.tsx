@@ -4,7 +4,6 @@ import {
     ThemeProvider
 } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar'
-import 'react-native-reanimated'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { AppContextProvider, useAppContext } from '@/context-provider/provider'
