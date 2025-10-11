@@ -13,13 +13,16 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
     const { token } = useAppContext()
     const { node, collapsible } = props
     const [data, setData] = useState<ListProfileNodes | undefined>()
+    const [isLoading, setIsLoading] = useState(false)
+    const [collapsed, setCollapsed] = useState(true)
 
     const handleClick = (filter: object) => {
-        console.log('click', node.name)
+        setIsLoading(true)
         fetchNodes(token, {
             ...filter
         }).then((data) => {
             setData(data)
+            setIsLoading(false)
         })
     }
 
@@ -29,16 +32,20 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
                 disabled={!collapsible}
                 style={styles.button}
                 onPress={() => {
-                    handleClick({
-                        parentNodeId: {
-                            eq: node.id
-                        }
-                    })
+                    if (collapsed) {
+                        !data &&
+                            handleClick({
+                                parentNodeId: {
+                                    eq: node.id
+                                }
+                            })
+                    }
+                    setCollapsed(!collapsed)
                 }}
             >
                 <Text style={styles.title}>{node.name}</Text>
             </TouchableOpacity>
-            {collapsible && data && (
+            {!collapsed && collapsible && data && (
                 <View style={styles.childContainer}>
                     {data.listProfileNodes.nodes.map((node: ProfileNode) => (
                         <CollapsibleNode
@@ -47,6 +54,7 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
                             collapsible={node.kind === 'FolderNode'}
                         />
                     ))}
+                    {isLoading && <Text>Loading...</Text>}
                 </View>
             )}
         </>
@@ -55,14 +63,13 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
 
 const styles = StyleSheet.create({
     button: {
-        paddingVertical: 16,
+        paddingVertical: 8,
         paddingHorizontal: 8
     },
     title: {
         fontSize: 18
     },
     childContainer: {
-        paddingVertical: 8,
-        paddingHorizontal: 8
+        paddingHorizontal: 16
     }
 })

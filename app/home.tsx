@@ -9,18 +9,13 @@ import { useQuery } from '@tanstack/react-query'
 export default function HomeScreen() {
     const { token } = useAppContext()
 
-    const { data, isLoading, isError, error } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ['profileNode'],
         queryFn: () => fetchNodes(token)
     })
 
-    console.log('data', data)
-
-    isError && console.log(error)
-
     return (
         <ScrollView>
-            {isLoading && <Text>Loading....</Text>}
             {data ? (
                 data.listProfileNodes.nodes.map((node) => (
                     <CollapsibleNode
@@ -32,6 +27,7 @@ export default function HomeScreen() {
             ) : (
                 <Text>Nothing to show</Text>
             )}
+            {isLoading && <Text>Loading...</Text>}
             <Button
                 onPress={async () => {
                     await SecureStore.deleteItemAsync('auth')
