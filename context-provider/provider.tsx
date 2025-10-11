@@ -3,17 +3,20 @@ import { Action, AppState } from '@/types/types'
 import reducer from '@/reducer/reducer'
 
 const defaultState: AppState = {
-    isSignedIn: false
+    isSignedIn: false,
+    token: ''
 }
 
-const AppContext = createContext<AppState>({ isSignedIn: false })
+const AppContext = createContext<AppState>(defaultState)
 const AppContextDispatch = createContext<(action: Action) => void>(() => {})
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(reducer, defaultState)
 
     return (
-        <AppContext value={{ isSignedIn: state.isSignedIn }}>
+        <AppContext
+            value={{ isSignedIn: state.isSignedIn, token: state.token }}
+        >
             <AppContextDispatch value={dispatch}>{children}</AppContextDispatch>
         </AppContext>
     )
