@@ -23,7 +23,7 @@ export async function loginUser({ username, password }: LoginData) {
 
 export async function fetchNodes(
     token: string,
-    afterCursor?: string,
+    afterCursor: string | null = null,
     filter?: object
 ) {
     const query = `query ListProfileNodes($first: Int, $after: String, $where: ProfileNodeFilterInput, $order: [ProfileNodeSortInput!]) {

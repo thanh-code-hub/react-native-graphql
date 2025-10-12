@@ -18,7 +18,7 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
 
     const handleClick = (filter: object) => {
         setIsLoading(true)
-        fetchNodes(token, {
+        fetchNodes(token, null, {
             ...filter
         }).then((data) => {
             setData(data)
@@ -46,6 +46,7 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
                 <Text style={styles.title}>{node.name}</Text>
             </TouchableOpacity>
             {!collapsed && collapsible && data && (
+                // Perhaps an InfiniteList here too ?
                 <View style={styles.childContainer}>
                     {data.listProfileNodes.nodes.map((node: ProfileNode) => (
                         <CollapsibleNode
