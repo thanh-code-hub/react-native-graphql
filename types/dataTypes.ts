@@ -7,12 +7,12 @@ export type ProfileNode = {
 
 export type PageInfo = {
     hasNextPage: boolean
-    endCursor: string | null
+    endCursor: string | undefined
 }
 
 export type ListProfileNodes = {
     listProfileNodes: {
         nodes: ProfileNode[]
+        pageInfo: PageInfo
     }
-    pageInfo: PageInfo
 }

@@ -1,6 +1,4 @@
 import { LoginData } from '@/types/types'
-import { request } from 'graphql-request'
-import { ListProfileNodes } from '@/types/dataTypes'
 
 const authURL: string | undefined = process.env.EXPO_PUBLIC_AUTH_URL
 const graphqlURL = process.env.EXPO_PUBLIC_GRAPHQL_URL!
@@ -25,8 +23,9 @@ export async function loginUser({ username, password }: LoginData) {
 
 export async function fetchNodes(
     token: string,
+    afterCursor?: string,
     filter?: object
-): Promise<ListProfileNodes> {
+) {
     const query = `query ListProfileNodes($first: Int, $after: String, $where: ProfileNodeFilterInput, $order: [ProfileNodeSortInput!]) {
           listProfileNodes(first: $first, after: $after, where: $where, order: $order) {
                 nodes {
@@ -51,16 +50,24 @@ export async function fetchNodes(
           }
     }`
 
-    return request<ListProfileNodes>(
-        graphqlURL,
-        query,
-        {
-            first: 50,
-            where: filter ? { ...filter } : undefined
-        },
-        {
+    const res = await fetch(graphqlURL, {
+        method: 'POST',
+        headers: {
             Authorization: `Bearer ${token}`,
             'X-WG-TRACE': 'true'
-        }
-    )
+        },
+        body: JSON.stringify({
+            query,
+            variables: {
+                first: 50,
+                after: afterCursor || undefined,
+                where: filter ? { ...filter } : undefined
+            }
+        })
+    })
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch nodes')
+    }
+    return res.json().then((res) => res.data)
 }
