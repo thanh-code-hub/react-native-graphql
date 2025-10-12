@@ -3,6 +3,9 @@ import { ListProfileNodes, ProfileNode } from '@/types/dataTypes'
 import { useAppContext } from '@/context-provider/provider'
 import { useState } from 'react'
 import { fetchNodes } from '@/utils/utils'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { icons } from '@/constants/icons'
+import { faQuestion } from '@fortawesome/free-solid-svg-icons/faQuestion'
 
 type CollapsibleNodeProps = {
     node: ProfileNode
@@ -43,6 +46,7 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
                     setCollapsed(!collapsed)
                 }}
             >
+                <FontAwesomeIcon icon={icons[node.kind] || faQuestion} />
                 <Text style={styles.title}>{node.name}</Text>
             </TouchableOpacity>
             {!collapsed && collapsible && data && (
@@ -65,10 +69,13 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
 const styles = StyleSheet.create({
     button: {
         paddingVertical: 8,
-        paddingHorizontal: 8
+        paddingHorizontal: 8,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     title: {
-        fontSize: 18
+        fontSize: 18,
+        marginLeft: 16
     },
     childContainer: {
         paddingHorizontal: 16
