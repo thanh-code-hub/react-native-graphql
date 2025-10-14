@@ -125,7 +125,7 @@ export default function LoginScreen() {
                     ]}
                 >
                     {mutation.isPending ? (
-                        <ActivityIndicator />
+                        <ActivityIndicator accessibilityHint="loading-spinner" />
                     ) : (
                         <Text
                             style={[

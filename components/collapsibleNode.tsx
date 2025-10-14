@@ -39,6 +39,7 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
     return (
         <>
             <TouchableOpacity
+                testID="collapsible-node"
                 disabled={!collapsible}
                 style={styles.button}
                 onPress={() => {
@@ -74,7 +75,7 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
                     )}
                 </View>
             )}
-            {isLoading && <ActivityIndicator />}
+            {isLoading && <ActivityIndicator testID={'node-loading-spinner'} />}
         </>
     )
 }

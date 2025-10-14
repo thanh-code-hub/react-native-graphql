@@ -14,7 +14,7 @@ jest.mock('@/context-provider/provider', () => ({
     useAppContextDispatch: jest.fn()
 }))
 jest.mock('@/apis/rest', () => ({
-    loginUser: jest.fn()
+    login: jest.fn()
 }))
 jest.mock('@tanstack/react-query', () => ({
     useMutation: jest.fn().mockImplementation(() => ({

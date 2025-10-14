@@ -32,7 +32,7 @@ export default function UserScreen() {
 
     return (
         <View style={styles.container}>
-            {isLoading && <ActivityIndicator />}
+            {isLoading && <ActivityIndicator testID={'user-loading-spinner'} />}
             {data && (
                 <View>
                     <Text style={styles.content}>
@@ -67,7 +67,7 @@ export default function UserScreen() {
                 }}
             >
                 {mutation.isPending ? (
-                    <ActivityIndicator />
+                    <ActivityIndicator testID={'logout-loading-spinner'} />
                 ) : (
                     <Text style={[globalStyles.buttonText, { color: 'white' }]}>
                         {' '}
