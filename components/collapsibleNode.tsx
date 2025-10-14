@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { icons } from '@/constants/icons'
 import { faQuestion } from '@fortawesome/free-solid-svg-icons/faQuestion'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
+import globalStyles from '@/styles/styles'
 
 type CollapsibleNodeProps = {
     node: ProfileNode
@@ -21,19 +22,27 @@ type CollapsibleNodeProps = {
 export default function CollapsibleNode(props: CollapsibleNodeProps) {
     const { node, collapsible } = props
     const [data, setData] = useState<ListProfileNodes | undefined>()
-    const [isLoading, setIsLoading] = useState(false)
-    const [collapsed, setCollapsed] = useState(true)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [collapsed, setCollapsed] = useState<boolean>(true)
+    const [isError, setIsError] = useState<boolean>(false)
 
     const handleClick = (filter: object) => {
         setIsLoading(true)
-        fetchNodes(null, {
-            ...filter
-        }).then((data) => {
-            setTimeout(() => {
-                setData(data)
-                setIsLoading(false)
-            }, 200) //to slow thing down so you can see the loading spinner
-        })
+        setTimeout(() => {
+            fetchNodes(null, {
+                ...filter
+            })
+                .then((data) => {
+                    setData(data)
+                })
+                .catch((error: string) => {
+                    console.error(error)
+                    setIsError(true)
+                })
+                .then(() => {
+                    setIsLoading(false)
+                })
+        }, 500) //to slow thing down so you can see the loading spinner, may affect unit testing
     }
 
     return (
@@ -72,6 +81,11 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
                         ))
                     ) : (
                         <Text>Nothing to show</Text>
+                    )}
+                    {isError && (
+                        <Text style={globalStyles.errorText}>
+                            Something went wrong while fetching node data
+                        </Text>
                     )}
                 </View>
             )}

@@ -61,7 +61,8 @@ export default function LoginScreen() {
                                 styles.input,
                                 errors.username && styles.errorInput
                             ]}
-                            placeholder="username"
+                            placeholder="Username"
+                            placeholderTextColor="#aaa"
                             autoCapitalize="none"
                             onBlur={onBlur}
                             onChangeText={onChange}
@@ -92,6 +93,7 @@ export default function LoginScreen() {
                                 errors.password && styles.errorInput
                             ]}
                             placeholder="Password"
+                            placeholderTextColor="#aaa"
                             secureTextEntry
                             onBlur={onBlur}
                             onChangeText={onChange}
@@ -163,7 +165,8 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 8,
         padding: 12,
-        fontSize: 16
+        fontSize: 16,
+        color: '#000'
     },
     errorInput: {
         borderColor: '#ff4d4f'

@@ -38,7 +38,7 @@ describe('LoginScreen', () => {
         const { getByPlaceholderText, getAllByText } = render(<LoginScreen />)
 
         expect(getAllByText('Login')).toHaveLength(2)
-        expect(getByPlaceholderText('username')).toBeTruthy()
+        expect(getByPlaceholderText('Username')).toBeTruthy()
         expect(getByPlaceholderText('Password')).toBeTruthy()
     })
 

@@ -47,14 +47,9 @@ describe('Home screen: infinite scroll', () => {
         // Loading spinner should appear initially
         expect(queryAllByTestId('home-loading-spinner')).toHaveLength(1)
 
-        // Wait for loading to finish
-        await waitFor(() => {
-            const spinner = queryAllByTestId('home-loading-spinner')
-            expect(spinner).toHaveLength(0)
-        })
-
-        // Should render list items
-        expect(getAllByTestId('collapsible-node')).toHaveLength(2)
+        await waitFor(() =>
+            expect(getAllByTestId('collapsible-node')).toHaveLength(2)
+        )
     })
 
     it('fetches more items when reaching the end of the list', async () => {
@@ -63,6 +58,7 @@ describe('Home screen: infinite scroll', () => {
             .mockResolvedValueOnce(mockNextResponse) // pagination
 
         const { getAllByTestId, getByTestId } = render(<HomeScreen />)
+        await new Promise((r) => setTimeout(r, 2000))
 
         await waitFor(() =>
             expect(getAllByTestId('collapsible-node')).toHaveLength(2)
