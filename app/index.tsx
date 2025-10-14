@@ -28,11 +28,8 @@ export default function LoginScreen() {
     const mutation = useMutation({
         mutationFn: login,
         onSuccess: async (data) => {
-            await SecureStore.setItemAsync('auth', JSON.stringify(data))
-            dispatch({
-                type: 'SIGN_IN',
-                payload: { token: data.data.access_token }
-            })
+            await SecureStore.setItemAsync('auth', JSON.stringify(data.data))
+            dispatch({ type: 'SIGN_IN' })
             router.push('/main/home')
         },
         onError: (error) => {

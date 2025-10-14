@@ -1,36 +1,18 @@
 import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native'
-import { useAppContext } from '@/context-provider/provider'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ProfileNode } from '@/types/dataTypes'
 import { fetchNodes } from '@/apis/graphql'
 import CollapsibleNode from '@/components/collapsibleNode'
 
-export default function InfiniteList({
-    parentNodeId
-}: {
-    parentNodeId?: string
-}) {
-    const { token } = useAppContext()
+export default function InfiniteList() {
     const [data, setData] = useState<ProfileNode[] | undefined>()
     const [endCursor, setEndCursor] = useState<string>('')
     const [hasNextPage, setHasNextPage] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const filter = useMemo(
-        () =>
-            parentNodeId
-                ? {
-                      parentNodeId: {
-                          eq: parentNodeId
-                      }
-                  }
-                : undefined,
-        [parentNodeId]
-    )
-
     useEffect(() => {
         setIsLoading(true)
-        fetchNodes(token, null, filter).then((res) => {
+        fetchNodes().then((res) => {
             setTimeout(() => {
                 setData(res.listProfileNodes.nodes)
                 setHasNextPage(res.listProfileNodes.pageInfo.hasNextPage)
@@ -38,7 +20,7 @@ export default function InfiniteList({
                 setIsLoading(false)
             }, 200) //to slow thing down so you can see the loading spinner
         })
-    }, [token, filter])
+    }, [])
 
     return (
         <>
@@ -65,7 +47,7 @@ export default function InfiniteList({
                     }
                     onEndReached={() => {
                         hasNextPage &&
-                            fetchNodes(token, endCursor, filter).then((res) => {
+                            fetchNodes(endCursor).then((res) => {
                                 setData([
                                     ...data,
                                     ...res.listProfileNodes.nodes

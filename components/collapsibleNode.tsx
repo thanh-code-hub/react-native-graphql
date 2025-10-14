@@ -6,7 +6,6 @@ import {
     View
 } from 'react-native'
 import { ListProfileNodes, ProfileNode } from '@/types/dataTypes'
-import { useAppContext } from '@/context-provider/provider'
 import { useState } from 'react'
 import { fetchNodes } from '@/apis/graphql'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -20,7 +19,6 @@ type CollapsibleNodeProps = {
 }
 
 export default function CollapsibleNode(props: CollapsibleNodeProps) {
-    const { token } = useAppContext()
     const { node, collapsible } = props
     const [data, setData] = useState<ListProfileNodes | undefined>()
     const [isLoading, setIsLoading] = useState(false)
@@ -28,7 +26,7 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
 
     const handleClick = (filter: object) => {
         setIsLoading(true)
-        fetchNodes(token, null, {
+        fetchNodes(null, {
             ...filter
         }).then((data) => {
             setTimeout(() => {

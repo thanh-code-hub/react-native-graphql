@@ -5,14 +5,12 @@ export default function reducer(state: AppState, action: Action): AppState {
         case 'SIGN_IN':
             return {
                 ...state,
-                isSignedIn: true,
-                token: action.payload.token!
+                isSignedIn: true
             }
         case 'SIGN_OUT':
             return {
                 ...state,
-                isSignedIn: false,
-                token: ''
+                isSignedIn: false
             }
         default:
             return state
