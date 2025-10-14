@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+    ActivityIndicator,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native'
 import { ListProfileNodes, ProfileNode } from '@/types/dataTypes'
 import { useAppContext } from '@/context-provider/provider'
 import { useState } from 'react'
@@ -24,8 +30,10 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
         fetchNodes(token, null, {
             ...filter
         }).then((data) => {
-            setData(data)
-            setIsLoading(false)
+            setTimeout(() => {
+                setData(data)
+                setIsLoading(false)
+            }, 200) //to slow thing down so you can see the loading spinner
         })
     }
 
@@ -49,7 +57,7 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
                 <FontAwesomeIcon icon={icons[node.kind] || faQuestion} />
                 <Text style={styles.title}>{node.name}</Text>
             </TouchableOpacity>
-            {!collapsed && collapsible && data && (
+            {!collapsed && collapsible && data && !isLoading && (
                 // Perhaps an InfiniteList here too ?
                 <View style={styles.childContainer}>
                     {data.listProfileNodes.nodes.map((node: ProfileNode) => (
@@ -59,9 +67,9 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
                             collapsible={node.kind === 'FolderNode'}
                         />
                     ))}
-                    {isLoading && <Text>Loading...</Text>}
                 </View>
             )}
+            {isLoading && <ActivityIndicator />}
         </>
     )
 }

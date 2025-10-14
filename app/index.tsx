@@ -1,4 +1,5 @@
 import {
+    ActivityIndicator,
     StyleSheet,
     Text,
     TextInput,
@@ -17,7 +18,7 @@ export default function LoginScreen() {
     const {
         control,
         handleSubmit,
-        formState: { errors, isLoading }
+        formState: { errors }
     } = useForm<LoginData>({
         defaultValues: { username: '', password: '' }
     })
@@ -112,22 +113,26 @@ export default function LoginScreen() {
             {/* Submit Button */}
             <View>
                 <TouchableOpacity
-                    disabled={isLoading}
+                    disabled={mutation.isPending}
                     onPress={handleSubmit(onSubmit)}
                     role={'button'}
                     testID={'login-button'}
                     style={[
                         styles.button,
                         {
-                            backgroundColor: isLoading
+                            backgroundColor: mutation.isPending
                                 ? 'rgba(142,142,142,0.5)'
                                 : 'rgb(108 194 74)'
                         }
                     ]}
                 >
-                    <Text style={{ color: 'white', textAlign: 'center' }}>
-                        {isLoading ? 'Logging in...' : 'Login'}
-                    </Text>
+                    {mutation.isPending ? (
+                        <ActivityIndicator />
+                    ) : (
+                        <Text style={{ color: 'white', textAlign: 'center' }}>
+                            Login
+                        </Text>
+                    )}
                 </TouchableOpacity>
             </View>
         </View>
