@@ -11,7 +11,7 @@ import { useMutation } from '@tanstack/react-query'
 import * as SecureStore from 'expo-secure-store'
 import { useAppContextDispatch } from '@/context-provider/provider'
 import { router } from 'expo-router'
-import { loginUser } from '@/utils/utils'
+import { login } from '@/apis/rest'
 import { LoginData } from '@/types/types'
 
 export default function LoginScreen() {
@@ -26,14 +26,14 @@ export default function LoginScreen() {
     const dispatch = useAppContextDispatch()
 
     const mutation = useMutation({
-        mutationFn: loginUser,
+        mutationFn: login,
         onSuccess: async (data) => {
             await SecureStore.setItemAsync('auth', JSON.stringify(data))
             dispatch({
                 type: 'SIGN_IN',
                 payload: { token: data.data.access_token }
             })
-            router.push('/home')
+            router.push('/main/home')
         },
         onError: (error) => {
             console.log(error.message)

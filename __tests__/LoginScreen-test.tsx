@@ -2,7 +2,7 @@ import React from 'react'
 import { render, fireEvent, waitFor } from '@testing-library/react-native'
 import LoginScreen from '@/app/index'
 import { useAppContextDispatch } from '@/context-provider/provider'
-import { loginUser } from '@/utils/utils'
+import { login } from '@/apis/rest'
 
 jest.mock('expo-router', () => ({
     router: { push: jest.fn() }
@@ -13,7 +13,7 @@ jest.mock('expo-secure-store', () => ({
 jest.mock('@/context-provider/provider', () => ({
     useAppContextDispatch: jest.fn()
 }))
-jest.mock('@/utils/utils', () => ({
+jest.mock('@/apis/rest', () => ({
     loginUser: jest.fn()
 }))
 jest.mock('@tanstack/react-query', () => ({
@@ -31,7 +31,7 @@ describe('LoginScreen', () => {
     beforeEach(() => {
         jest.clearAllMocks()
         ;(useAppContextDispatch as jest.Mock).mockReturnValue(mockDispatch)
-        ;(loginUser as jest.Mock).mockImplementation(mockLogin)
+        ;(login as jest.Mock).mockImplementation(mockLogin)
     })
 
     it('renders login form correctly', () => {

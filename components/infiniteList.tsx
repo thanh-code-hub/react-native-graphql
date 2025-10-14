@@ -2,7 +2,7 @@ import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native'
 import { useAppContext } from '@/context-provider/provider'
 import { useEffect, useMemo, useState } from 'react'
 import { ProfileNode } from '@/types/dataTypes'
-import { fetchNodes } from '@/utils/utils'
+import { fetchNodes } from '@/apis/graphql'
 import CollapsibleNode from '@/components/collapsibleNode'
 
 export default function InfiniteList({

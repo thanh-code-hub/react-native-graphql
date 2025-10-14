@@ -34,7 +34,7 @@ function RootNavigation() {
     return (
         <Stack>
             <Stack.Protected guard={isSignedIn}>
-                <Stack.Screen name="home" options={{ headerShown: false }} />
+                <Stack.Screen name="main" options={{ headerShown: false }} />
             </Stack.Protected>
             <Stack.Screen name="index" options={{ headerShown: false }} />
         </Stack>

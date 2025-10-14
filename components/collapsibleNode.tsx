@@ -8,10 +8,11 @@ import {
 import { ListProfileNodes, ProfileNode } from '@/types/dataTypes'
 import { useAppContext } from '@/context-provider/provider'
 import { useState } from 'react'
-import { fetchNodes } from '@/utils/utils'
+import { fetchNodes } from '@/apis/graphql'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { icons } from '@/constants/icons'
 import { faQuestion } from '@fortawesome/free-solid-svg-icons/faQuestion'
+import { IconProp } from '@fortawesome/fontawesome-svg-core'
 
 type CollapsibleNodeProps = {
     node: ProfileNode
@@ -54,19 +55,25 @@ export default function CollapsibleNode(props: CollapsibleNodeProps) {
                     setCollapsed(!collapsed)
                 }}
             >
-                <FontAwesomeIcon icon={icons[node.kind] || faQuestion} />
+                <FontAwesomeIcon
+                    icon={(icons[node.kind] || faQuestion) as IconProp}
+                />
                 <Text style={styles.title}>{node.name}</Text>
             </TouchableOpacity>
             {!collapsed && collapsible && data && !isLoading && (
                 // Perhaps an InfiniteList here too ?
                 <View style={styles.childContainer}>
-                    {data.listProfileNodes.nodes.map((node: ProfileNode) => (
-                        <CollapsibleNode
-                            key={node.id}
-                            node={node}
-                            collapsible={node.kind === 'FolderNode'}
-                        />
-                    ))}
+                    {data.listProfileNodes.nodes.length ? (
+                        data.listProfileNodes.nodes.map((node: ProfileNode) => (
+                            <CollapsibleNode
+                                key={node.id}
+                                node={node}
+                                collapsible={node.kind === 'FolderNode'}
+                            />
+                        ))
+                    ) : (
+                        <Text>Nothing to show</Text>
+                    )}
                 </View>
             )}
             {isLoading && <ActivityIndicator />}
