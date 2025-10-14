@@ -13,6 +13,7 @@ import { useAppContextDispatch } from '@/context-provider/provider'
 import { router } from 'expo-router'
 import { login } from '@/apis/rest'
 import { LoginData } from '@/types/types'
+import globalStyles from '@/styles/styles'
 
 export default function LoginScreen() {
     const {
@@ -115,7 +116,7 @@ export default function LoginScreen() {
                     role={'button'}
                     testID={'login-button'}
                     style={[
-                        styles.button,
+                        globalStyles.button,
                         {
                             backgroundColor: mutation.isPending
                                 ? 'rgba(142,142,142,0.5)'
@@ -126,7 +127,12 @@ export default function LoginScreen() {
                     {mutation.isPending ? (
                         <ActivityIndicator />
                     ) : (
-                        <Text style={{ color: 'white', textAlign: 'center' }}>
+                        <Text
+                            style={[
+                                globalStyles.buttonText,
+                                { color: 'white' }
+                            ]}
+                        >
                             Login
                         </Text>
                     )}
@@ -167,11 +173,5 @@ const styles = StyleSheet.create({
         marginVertical: 4,
         fontSize: 13,
         textAlign: 'center'
-    },
-    button: {
-        paddingVertical: 16,
-        paddingHorizontal: 8,
-        textAlign: 'center',
-        borderRadius: 10
     }
 })
