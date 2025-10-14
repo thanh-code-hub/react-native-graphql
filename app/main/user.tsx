@@ -1,12 +1,23 @@
-import { ActivityIndicator, Text, TouchableOpacity } from 'react-native'
+import {
+    ActivityIndicator,
+    Text,
+    TouchableOpacity,
+    View,
+    StyleSheet
+} from 'react-native'
 import { router } from 'expo-router'
-import { logout } from '@/apis/rest'
-import { useMutation } from '@tanstack/react-query'
+import { fetchUserData, logout } from '@/apis/rest'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAppContextDispatch } from '@/context-provider/provider'
 import globalStyles from '@/styles/styles'
 
 export default function UserScreen() {
     const dispatch = useAppContextDispatch()
+
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['fetchUserData'],
+        queryFn: fetchUserData
+    })
 
     const mutation = useMutation({
         mutationFn: logout,
@@ -14,14 +25,32 @@ export default function UserScreen() {
             dispatch({ type: 'SIGN_OUT' })
             router.push('/')
         },
-        onError: (error) => {
-            console.log(error.message)
+        onError: (mutationError) => {
+            console.error('Mutation error', mutationError.message)
         }
     })
 
     return (
-        <>
-            {mutation.isError && <Text>Something went wrong</Text>}
+        <View style={styles.container}>
+            {isLoading && <ActivityIndicator />}
+            {data && (
+                <View>
+                    <Text style={styles.content}>
+                        Username: {data.username}
+                    </Text>
+                    <Text style={styles.content}>
+                        Public name: {data.publicName}
+                    </Text>
+                    <Text style={styles.content}>
+                        Language: {data.language}
+                    </Text>
+                </View>
+            )}
+            {isError && (
+                <Text style={globalStyles.errorText}>
+                    Failed to fetch user data.
+                </Text>
+            )}
             <TouchableOpacity
                 disabled={mutation.isPending}
                 style={[
@@ -29,7 +58,8 @@ export default function UserScreen() {
                     {
                         backgroundColor: mutation.isPending
                             ? 'rgba(142,142,142,0.5)'
-                            : 'rgb(108 194 74)'
+                            : 'rgb(108 194 74)',
+                        marginBottom: 50
                     }
                 ]}
                 onPress={() => {
@@ -45,6 +75,24 @@ export default function UserScreen() {
                     </Text>
                 )}
             </TouchableOpacity>
-        </>
+            {mutation.isError && (
+                <Text style={globalStyles.errorText}>
+                    {mutation.error.message}
+                </Text>
+            )}
+        </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        justifyContent: 'space-between',
+        height: '100%',
+        paddingHorizontal: 16,
+        paddingVertical: 8
+    },
+    content: {
+        fontSize: 24,
+        paddingVertical: 4
+    }
+})

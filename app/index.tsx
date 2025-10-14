@@ -29,12 +29,12 @@ export default function LoginScreen() {
     const mutation = useMutation({
         mutationFn: login,
         onSuccess: async (data) => {
-            await SecureStore.setItemAsync('auth', JSON.stringify(data.data))
+            await SecureStore.setItemAsync('auth', JSON.stringify(data))
             dispatch({ type: 'SIGN_IN' })
             router.push('/main/home')
         },
         onError: (error) => {
-            console.log(error.message)
+            console.error('Mutation error', error.message)
         }
     })
 
@@ -68,7 +68,7 @@ export default function LoginScreen() {
                             value={value}
                         />
                         {errors.username && (
-                            <Text style={styles.errorText}>
+                            <Text style={globalStyles.errorText}>
                                 {errors.username.message}
                             </Text>
                         )}
@@ -98,14 +98,14 @@ export default function LoginScreen() {
                             value={value}
                         />
                         {errors.password && (
-                            <Text style={styles.errorText}>
+                            <Text style={globalStyles.errorText}>
                                 {errors.password.message}
                             </Text>
                         )}
                     </View>
                 )}
             />
-            <Text style={styles.errorText}>
+            <Text style={globalStyles.errorText}>
                 {mutation.isError && mutation.error.message}
             </Text>
             {/* Submit Button */}
@@ -167,11 +167,5 @@ const styles = StyleSheet.create({
     },
     errorInput: {
         borderColor: '#ff4d4f'
-    },
-    errorText: {
-        color: 'red',
-        marginVertical: 4,
-        fontSize: 13,
-        textAlign: 'center'
     }
 })

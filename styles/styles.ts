@@ -9,6 +9,12 @@ const globalStyles = StyleSheet.create({
     },
     buttonText: {
         textAlign: 'center'
+    },
+    errorText: {
+        color: 'red',
+        marginVertical: 4,
+        fontSize: 13,
+        textAlign: 'center'
     }
 })
 
